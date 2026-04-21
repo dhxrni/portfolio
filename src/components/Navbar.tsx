@@ -1,50 +1,66 @@
 import { useEffect } from "react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 import HoverLinks from "./HoverLinks";
-import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import "./styles/Navbar.css";
 
+// Register plugins ONCE
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+
+// Export smoother safely
+export let smoother: ScrollSmoother | null = null;
 
 const Navbar = () => {
   useEffect(() => {
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
+    // Prevent duplicate instances (important for React strict mode)
+    if (!smoother) {
+      smoother = ScrollSmoother.create({
+        wrapper: "#smooth-wrapper",
+        content: "#smooth-content",
+        smooth: 1.7,
+        speed: 1.7,
+        effects: true,
+        autoResize: true,
+        ignoreMobileResize: true,
+      });
 
-    smoother.scrollTop(0);
-    smoother.paused(true);
+      smoother.scrollTop(0);
+      smoother.paused(true);
+    }
 
-    let links = document.querySelectorAll(".header ul a");
+    const links = document.querySelectorAll(".header ul a");
+
     links.forEach((elem) => {
-      let element = elem as HTMLAnchorElement;
-      element.addEventListener("click", (e) => {
-        if (window.innerWidth > 1024) {
+      elem.addEventListener("click", (e) => {
+        if (window.innerWidth > 1024 && smoother) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
+          const target = (e.currentTarget as HTMLAnchorElement).getAttribute("data-href");
+          if (target) {
+            smoother.scrollTo(target, true, "top top");
+          }
         }
       });
     });
-    window.addEventListener("resize", () => {
+
+    const handleResize = () => {
       ScrollSmoother.refresh(true);
-    });
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
+
   return (
     <>
       <div className="header">
         <a href="/#" className="navbar-title" data-cursor="disable">
           Logo
         </a>
+
         <a
           href="mailto:dharnishivansh@gmail.com"
           className="navbar-connect"
@@ -52,6 +68,7 @@ const Navbar = () => {
         >
           dharnishivansh@gmail.com
         </a>
+
         <ul>
           <li>
             <a data-href="#about" href="#about">

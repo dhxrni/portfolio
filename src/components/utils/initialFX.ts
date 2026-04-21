@@ -1,10 +1,15 @@
-import { SplitText } from "gsap-trial/SplitText";
+// import { SplitText } from "gsap-trial/SplitText";
+// import gsap from "gsap";
+// import { smoother } from "../Navbar";
 import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { smoother } from "../Navbar";
 
+gsap.registerPlugin(SplitText, ScrollSmoother);
 export function initialFX() {
   document.body.style.overflowY = "auto";
-  smoother.paused(false);
+  smoother?.paused(false);
   document.getElementsByTagName("main")[0].classList.add("main-active");
   gsap.to("body", {
     backgroundColor: "#0b080c",
