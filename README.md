@@ -1,12 +1,13 @@
-# My Portfolio Website - Overview 🚀
+# Shivansh Dharni — Portfolio Website 🚀
 
-This repository contains the open-source version of my personal portfolio website.  
-Feel free to explore the code and use it for learning and inspiration.
+Personal portfolio website showcasing my projects, skills, and experience as an AI Engineer in progress.
 
-## ⚙️ Tech Stack
+🔗 **Live Site:** https://portfolio-sd-beige.vercel.app
 
-React • TypeScript • GSAP • Three.js • WebGL • HTML • CSS • JavaScript
+## Tech Stack
+React · TypeScript · Vite · GSAP · Three.js · CSS
 
-### Preview of portfolio
+## About
+Built to showcase my transition from Java backend engineering to AI/ML engineering.  
+Features project demos, skill overview, and contact links.
 
-Chechout- https://portfolio-sd-beige.vercel.app/
