@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import HoverLinks from "./HoverLinks";
+import { MdDownload, MdOpenInNew, MdExpandMore } from "react-icons/md";
 import "./styles/Navbar.css";
 
 // Register plugins ONCE
@@ -11,7 +12,16 @@ gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 // Export smoother safely
 export let smoother: ScrollSmoother | null = null;
 
+const resumes = [
+  { label: "General Resume", file: "/resume/resume.pdf" },
+  // Add more resumes here, e.g.:
+  // { label: "ML / AI Resume", file: "/resume/resume-ml.pdf" },
+  // { label: "Backend Resume", file: "/resume/resume-backend.pdf" },
+];
+
 const Navbar = () => {
+  const [resumeOpen, setResumeOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     // Prevent duplicate instances (important for React strict mode)
     if (!smoother) {
@@ -54,6 +64,17 @@ const Navbar = () => {
     };
   }, []);
 
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setResumeOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <>
       <div className="header">
@@ -84,6 +105,44 @@ const Navbar = () => {
             <a data-href="#contact" href="#contact">
               <HoverLinks text="CONTACT" />
             </a>
+          </li>
+          <li className="resume-nav-item" ref={dropdownRef}>
+            <button
+              className={`resume-nav-btn${resumeOpen ? " active" : ""}`}
+              onClick={() => setResumeOpen((v) => !v)}
+              aria-haspopup="true"
+              aria-expanded={resumeOpen}
+            >
+              RESUME <MdExpandMore className={`resume-chevron${resumeOpen ? " rotated" : ""}`} />
+            </button>
+            {resumeOpen && (
+              <div className="resume-dropdown">
+                {resumes.map((r) => (
+                  <div className="resume-dropdown-item" key={r.file}>
+                    <span className="resume-label">{r.label}</span>
+                    <div className="resume-actions">
+                      <a
+                        href={r.file}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="Open"
+                        className="resume-action-btn"
+                      >
+                        <MdOpenInNew />
+                      </a>
+                      <a
+                        href={r.file}
+                        download
+                        title="Download"
+                        className="resume-action-btn"
+                      >
+                        <MdDownload />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </li>
         </ul>
       </div>

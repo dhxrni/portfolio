@@ -208,3 +208,61 @@
     height: auto;
   }
 }
+
+/* ── "More Projects" card ─────────────────────────── */
+.work-box--more {
+  border-right-style: dashed;
+  opacity: 0.75;
+  transition: opacity 0.2s;
+}
+.work-box--more:hover {
+  opacity: 1;
+}
+
+.work-more-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.work-more-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #888;
+  line-height: 1.5;
+}
+
+.work-more-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #c481ff;
+  background: rgba(196, 129, 255, 0.1);
+  border: 1px solid rgba(196, 129, 255, 0.25);
+  border-radius: 20px;
+  padding: 2px 8px;
+  width: fit-content;
+}
+
+.work-more-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #adacac;
+  text-decoration: none;
+  border: 1px solid #363636;
+  padding: 8px 16px;
+  border-radius: 50px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.work-more-link:hover {
+  color: #c481ff;
+  border-color: rgba(196, 129, 255, 0.4);
+}

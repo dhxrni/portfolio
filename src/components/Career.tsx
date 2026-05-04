@@ -15,13 +15,13 @@ const Career = () => {
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Intern</h4>
-                <h5>UPCL Ltd, Dehradun</h5>
+                <h4>Assistant Software Engineer</h4>
+                <h5>UPCL (Infinite Sols)</h5>
               </div>
-              <h3>July 2023</h3>
+              <h3>July 2025 - Present</h3>
             </div>
             <p>
-              Worked across Operations, Commercial, Finance, and IT departments. Focused on power quality improvement, billing systems, data center operations, and SCADA.
+              Responsible for resolving UPCL's backend Java-related tickets and technical issues. Debug and enhance APIs, manage database operations, write tests, and perform code reviews.
             </p>
           </div>
           <div className="career-info-box">
@@ -39,13 +39,13 @@ const Career = () => {
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Assistant Software Engineer</h4>
-                <h5>UPCL (Infinite Sols)</h5>
+                <h4>Intern</h4>
+                <h5>UPCL Ltd, Dehradun</h5>
               </div>
-              <h3>July 2025 - Present</h3>
+              <h3>July 2023</h3>
             </div>
             <p>
-              Responsible for resolving UPCL's backend Java-related tickets and technical issues. Debug and enhance APIs, manage database operations, write tests, and perform code reviews.
+              Worked across Operations, Commercial, Finance, and IT departments. Focused on power quality improvement, billing systems, data center operations, and SCADA.
             </p>
           </div>
         </div>

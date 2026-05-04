@@ -81,3 +81,113 @@
     font-size: 18px;
   }
 }
+
+/* ── Resume Dropdown ─────────────────────────────── */
+.resume-nav-item {
+  position: relative;
+}
+
+.resume-nav-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #eae5ec;
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  transition: color 0.2s;
+}
+.resume-nav-btn:hover,
+.resume-nav-btn.active {
+  color: #c481ff;
+}
+
+.resume-chevron {
+  font-size: 16px;
+  transition: transform 0.25s ease;
+}
+.resume-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+.resume-dropdown {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  min-width: 220px;
+  background: rgba(18, 12, 24, 0.92);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(196, 129, 255, 0.2);
+  border-radius: 12px;
+  padding: 8px;
+  z-index: 99999;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: dropdownIn 0.18s ease;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.resume-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.resume-dropdown-item:hover {
+  background: rgba(196, 129, 255, 0.08);
+}
+
+.resume-label {
+  font-size: 13px;
+  color: #ccc;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.resume-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: 16px;
+}
+
+.resume-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(196, 129, 255, 0.1);
+  border: 1px solid rgba(196, 129, 255, 0.2);
+  color: #c481ff;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.resume-action-btn:hover {
+  background: rgba(196, 129, 255, 0.25);
+  border-color: rgba(196, 129, 255, 0.5);
+  color: #fff;
+}
+
+@media only screen and (min-width: 500px) {
+  .resume-nav-btn {
+    font-size: 14px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .resume-nav-btn {
+    font-size: 16px;
+  }
+}
