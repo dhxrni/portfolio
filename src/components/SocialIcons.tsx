@@ -6,10 +6,22 @@ import {
 } from "react-icons/fa6";
 import "./styles/SocialIcons.css";
 import { TbNotes } from "react-icons/tb";
-import { useEffect } from "react";
-import HoverLinks from "./HoverLinks";
+import { MdDownload, MdOpenInNew } from "react-icons/md";
+import { useEffect, useState, useRef } from "react";
+
+// ─── Add / remove resumes here ───────────────────────────────────────────────
+// Drop the PDF into public/resume/ and add an entry below.
+const resumes = [
+  { label: "General Resume",  file: "/resume/resume.pdf" },
+  // { label: "ML / AI Resume",   file: "/resume/resume-ml.pdf" },
+  // { label: "Backend Resume",   file: "/resume/resume-backend.pdf" },
+];
+// ─────────────────────────────────────────────────────────────────────────────
 
 const SocialIcons = () => {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const social = document.getElementById("social") as HTMLElement;
 
@@ -47,13 +59,23 @@ const SocialIcons = () => {
       };
 
       document.addEventListener("mousemove", onMouseMove);
-
       updatePosition();
 
       return () => {
         elem.removeEventListener("mousemove", onMouseMove);
       };
     });
+  }, []);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
   }, []);
 
   return (
@@ -80,12 +102,60 @@ const SocialIcons = () => {
           </a>
         </span>
       </div>
-      <a className="resume-button" href="/resume/resume.pdf" target="_blank" rel="noopener noreferrer">
-        <HoverLinks text="RESUME" />
-        <span>
-          <TbNotes />
-        </span>
-      </a>
+
+      {/* ── Resume picker ── */}
+      <div className="resume-picker" ref={dropdownRef}>
+        {/* Upward dropdown (only when multiple resumes) */}
+        {open && resumes.length > 1 && (
+          <div className="resume-picker-dropdown">
+            {resumes.map((r) => (
+              <div className="resume-picker-item" key={r.file}>
+                <span className="resume-picker-label">{r.label}</span>
+                <div className="resume-picker-actions">
+                  <a
+                    href={r.file}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Open"
+                    className="resume-picker-btn"
+                  >
+                    <MdOpenInNew />
+                  </a>
+                  <a
+                    href={r.file}
+                    download
+                    title="Download"
+                    className="resume-picker-btn"
+                  >
+                    <MdDownload />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Main button — if single resume, open directly; else toggle picker */}
+        {resumes.length === 1 ? (
+          <a
+            className={`resume-button`}
+            href={resumes[0].file}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            RESUME
+            <span><TbNotes /></span>
+          </a>
+        ) : (
+          <button
+            className={`resume-button resume-button--toggle${open ? " resume-button--active" : ""}`}
+            onClick={() => setOpen((v) => !v)}
+          >
+            RESUME
+            <span><TbNotes /></span>
+          </button>
+        )}
+      </div>
     </div>
   );
 };
