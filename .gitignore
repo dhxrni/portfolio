@@ -26,3 +26,6 @@ dist-ssr
 
 backup/
 .env
+
+# Resumes are hosted on Google Drive — don't commit PDFs to the repo
+public/resume/*.pdf

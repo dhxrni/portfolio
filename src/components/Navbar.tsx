@@ -2,19 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { TbDownload, TbLoader2, TbAlertCircle, TbChevronDown } from "react-icons/tb";
+import { TbDownload, TbEye, TbChevronDown } from "react-icons/tb";
 import HoverLinks from "./HoverLinks";
+import ResumeModal from "./ResumeModal";
+import resumes, { type ResumeEntry } from "../data/resumes";
 import "./styles/Navbar.css";
-
-const GITHUB_RESUME_API =
-  "https://api.github.com/repos/dhxrni/portfolio/contents/public/resume";
-
-interface ResumeFile {
-  name: string;
-  download_url: string;
-}
-
-type FetchState = "idle" | "loading" | "done" | "error";
 
 // Register plugins ONCE
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
@@ -24,8 +16,7 @@ export let smoother: ScrollSmoother | null = null;
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [resumes, setResumes] = useState<ResumeFile[]>([]);
-  const [fetchState, setFetchState] = useState<FetchState>("idle");
+  const [activeResume, setActiveResume] = useState<ResumeEntry | null>(null);
   const dropdownRef = useRef<HTMLLIElement>(null);
 
   // Close dropdown when clicking outside
@@ -42,33 +33,11 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const fetchResumes = async () => {
-    if (fetchState === "loading") return;
-    setFetchState("loading");
-    try {
-      const res = await fetch(GITHUB_RESUME_API);
-      if (!res.ok) throw new Error("Failed to fetch");
-      const data: Array<{ name: string; download_url: string }> =
-        await res.json();
-      const pdfs = data
-        .filter((f) => f.name.toLowerCase().endsWith(".pdf") && f.download_url)
-        .map((f) => ({
-          name: f.name.replace(/\.pdf$/i, ""),
-          download_url: f.download_url,
-        }));
-      setResumes(pdfs);
-      setFetchState("done");
-    } catch {
-      setFetchState("error");
-    }
-  };
+  const handleToggle = () => setOpen((prev) => !prev);
 
-  const handleToggle = () => {
-    const next = !open;
-    setOpen(next);
-    if (next && fetchState === "idle") {
-      fetchResumes();
-    }
+  const handleView = (r: ResumeEntry) => {
+    setActiveResume(r);
+    setOpen(false);
   };
   useEffect(() => {
     // Prevent duplicate instances (important for React strict mode)
@@ -154,42 +123,38 @@ const Navbar = () => {
 
             {open && (
               <div className="resume-dropdown">
-                {fetchState === "loading" && (
-                  <div className="resume-dropdown-item" style={{ justifyContent: "center", color: "#ccc" }}>
-                    <TbLoader2 className="resume-spin" style={{ marginRight: '8px' }} />
-                    <span className="resume-label">Fetching resumes…</span>
-                  </div>
-                )}
-                {fetchState === "error" && (
-                  <div className="resume-dropdown-item" style={{ justifyContent: "center", color: "#ff6b6b" }}>
-                    <TbAlertCircle style={{ marginRight: '8px', fontSize: '16px' }} />
-                    <span className="resume-label" style={{ color: "#ff6b6b" }}>Could not load resumes</span>
-                  </div>
-                )}
-                {fetchState === "done" && resumes.length === 0 && (
-                  <div className="resume-dropdown-item" style={{ justifyContent: "center", color: "#ff6b6b" }}>
-                    <span className="resume-label" style={{ color: "#ff6b6b" }}>No PDFs found</span>
-                  </div>
-                )}
-                {fetchState === "done" &&
-                  resumes.map((r) => (
-                    <div key={r.name} className="resume-dropdown-item">
-                      <span className="resume-label">{r.name}</span>
-                      <div className="resume-actions">
-                        <a
-                          href={r.download_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="resume-action-btn"
-                          download
-                          title="Download"
-                        >
-                          <TbDownload />
-                        </a>
-                      </div>
+                {resumes.map((r) => (
+                  <div key={r.driveId} className="resume-dropdown-item">
+                    <span className="resume-label">{r.label}</span>
+                    <div className="resume-actions">
+                      <button
+                        className="resume-action-btn"
+                        onClick={() => handleView(r)}
+                        title="View"
+                      >
+                        <TbEye />
+                      </button>
+                      <a
+                        href={`https://drive.google.com/uc?export=download&id=${r.driveId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="resume-action-btn"
+                        title="Download"
+                      >
+                        <TbDownload />
+                      </a>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
+            )}
+
+            {/* Full-screen PDF viewer modal */}
+            {activeResume && (
+              <ResumeModal
+                resume={activeResume}
+                onClose={() => setActiveResume(null)}
+              />
             )}
           </li>
         </ul>
