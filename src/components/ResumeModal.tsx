@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { TbX, TbDownload, TbExternalLink } from "react-icons/tb";
 import type { ResumeEntry } from "../data/resumes";
 import "./styles/ResumeModal.css";
@@ -39,7 +40,7 @@ const ResumeModal = ({ resume, onClose }: ResumeModalProps) => {
     if (e.target === overlayRef.current) onClose();
   };
 
-  return (
+  return createPortal(
     <div
       className="resume-modal-overlay"
       ref={overlayRef}
@@ -93,7 +94,8 @@ const ResumeModal = ({ resume, onClose }: ResumeModalProps) => {
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

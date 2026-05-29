@@ -154,18 +154,29 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .resume-modal-overlay {
+    padding: 0;
+  }
   .resume-modal {
-    height: 92vh;
-    border-radius: 14px;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
   }
   .resume-modal-header {
-    padding: 12px 14px;
+    padding: 12px 16px;
   }
   .resume-modal-btn span {
-    display: none; /* icon-only on very small screens */
+    display: none; /* Icon-only on mobile devices to save space */
   }
   .resume-modal-btn {
-    padding: 7px 10px;
+    padding: 8px 10px;
+    font-size: 15px;
+  }
+  .resume-modal-close {
+    width: 38px;
+    height: 38px;
   }
 }
+
